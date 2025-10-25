@@ -1,0 +1,60 @@
+% histogram and polygon
+
+clc;clear;
+
+% input data
+
+data = [73 65 82 70 45 50 70 54 32 75 ...
+75 67 65 60 75 87 83 40 72 64 ...
+58 75 89 70 73 55 61 78 89 93 ...
+43 51 59 38 65 71 75 85 65 85 ...
+49 97 55 60 76 75 69 35 45 63];
+
+data = sort(data);
+
+% enter information of first class
+
+lower_boundary = 30;
+upper_boundary = 40;
+number_class = 7;
+X_label = 'score';
+Y_label = 'frequency';
+
+% calculate midpoint and frequency
+width = upper_boundary - lower_boundary;
+frequency = zeros(1,number_class+2);
+midpoint = zeros(1,number_class+2);
+
+for j = 0:(number_class + 2)
+    if j<(number_class + 2)
+        midpoint(j+1) = (lower_boundary+upper_boundary)/2 + (j-1)*width;
+    end
+
+    for i = 1:numel(data)
+        if (data(i) == lower_boundary + (j-1)*width || ...
+                data(i) > lower_boundary + (j-1)*width) && ...
+                data(i) < upper_boundary + (j-1)*width
+            frequency(1,j+1) = frequency(1,j+1) + 1;
+        end
+    end
+end
+
+% relative frequency
+relative_f = frequency/numel(data);
+
+% histogram (frequency)
+histogram(data,lower_boundary:width:(upper_boundary+width*number_class));hold on;
+
+% polygon (frequency)
+plot(midpoint,frequency,'s-',MarkerSize=10,MarkerFaceColor='r'); hold on;
+
+% histogram (relative)
+% histogram(data,0.5:1400:7000.5,'Normalization','probability');hold on;
+
+% polygon (relative)
+% plot(midpoint,relative_f,'s-',MarkerSize=10,MarkerFaceColor='r'); hold on;
+
+% Graph setting
+set(gca, 'xtick', lower_boundary:width:(upper_boundary+width*number_class)) % set the x scale
+xlabel(X_label)
+ylabel(Y_label)
